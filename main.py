@@ -1,6 +1,4 @@
 from fastapi import FastAPI, Request
-from pydantic import BaseModel
-from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from uuid import uuid4
@@ -34,36 +32,22 @@ def read_root():
 
 @app.get("/todos")
 def get_todos(): 
-    return todos
+    """ return all the todos """
 
 @app.get("/todos/{id}")
 def get_todo(id: str):
     """ loop through all the todos and return the one which matches the id """
-    for todo in todos:
-        if todo.id == id:
-            return todo
-    return None
 
 @app.post("/todo")
 async def create_todo(request: Request):
     """ create a todo and append it to the end of the todos list """
-    todo = json.loads(await request.body())
-    new_todo = {
-        "id" : str(uuid4()),
-        "message" : todo["message"],
-        "completed" : False
-    }
-    todos.append(new_todo)
-    return todo
+    # make sure to convert the data to json
 
 @app.post("/todo/toggle/{id}")
 async def toggle_todo_completion(id: str):
     """ if the todo hasnt been marked as complete then check it else uncheck it """
     # search for the todo in the list with the matching id
-    for todo in todos:
-        if todo["id"] == id:
-            # toggle its complete status
-            todo["completed"] = True if todo["completed"] == False else False
-            return True
 
-    return False # could not find the task with the given id
+    # toggle its complete status
+        
+    # could not find the task with the given id
